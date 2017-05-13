@@ -9,8 +9,7 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
-int lighting_style = 0;
-int intensity = 0;
+uint8_t intensity = 0;
 uint8_t index = 0;
 
 void setup() {
@@ -21,24 +20,20 @@ void setup() {
 }
 
 void loop() {
-    if (Serial.available() > 1) {
-      lighting_style = Serial.read();
+    if (Serial.available() > 0) {
       intensity = Serial.read();
 
       if(intensity == 0){
-        index = random(300);
+        index = random(294)+3;
       }
 
+    
       strip.setPixelColor(index, strip.Color(255,255,255));
+      strip.setPixelColor(index+1, strip.Color(255,255,255));
+      strip.setPixelColor(index+2, strip.Color(255,255,255));
+
       strip.setBrightness(intensity);
       strip.show();
-
-      
-      Serial.print("Index: ");
-      Serial.print(index);
-      Serial.print("  Intensity:");
-      Serial.println(intensity);
-
-      
+//      Serial.println(index);
     }
 }

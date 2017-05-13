@@ -11,7 +11,7 @@ for i in range(0, numdevices):
             print "Input Device id ", i, " - ", pa.get_device_info_by_host_api_device_index(0, i).get('name')
 
 chunk = 1024
-threshold = 100
+threshold = 5
 counter=0
 
 detector = ThunderDetector(chunk)
@@ -29,13 +29,13 @@ ser = Serial('/dev/ttyUSB0')
 
 while len(data)>0:
     #check if there is thunder in the data
-    detector.detect(data, 100)
+    detector.detect(data, threshold)
     #get new data
     data=stream.read(chunk)
     #change this print statement to output
     intensity = int(detector.intensity)
     print intensity
-    ser.write([0,intensity])
+    ser.write([intensity])
 
 stream.stop_stream()
 stream.close()

@@ -7,8 +7,8 @@ info = pa.get_host_api_info_by_index(0)
 
 numdevices = info.get('deviceCount')
 for i in range(0, numdevices):
-        if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
-            print "Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name')
+        if (pa.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+            print "Input Device id ", i, " - ", pa.get_device_info_by_host_api_device_index(0, i).get('name')
 
 chunk = 1024
 threshold = 100
@@ -20,7 +20,8 @@ detector = ThunderDetector(chunk)
 stream = pa.open(format = paInt16,
                  channels = 1,
                  rate = 44100,
-                 input=True)
+                 input=True,
+                 )
 
 data=stream.read(chunk)
 

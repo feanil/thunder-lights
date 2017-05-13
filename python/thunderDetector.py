@@ -19,17 +19,18 @@ class ThunderDetector:
         if self.prev_avg==0:
             self.prev_avg = mean(fcontent[self.minfbin:self.maxfbin])
         else:
-            if mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold:
+            if mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold: #new thunder
                 self.intensity= 255 #normalize max brightness to 255
                 self.prev_max=mean(fcontent[self.minfbin:self.maxfbin])
                 self.time_since_thunder=0
             elif (self.time_since_thunder==0 and mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold/10):
+                #continuing old thunder
                 self.intensity = 255 * mean(fcontent[self.minfbin:self.maxfbin]) / self.prev_max # normalize max brightness to 255
                 self.time_since_thunder = 0
-            else:
+            else: #no thunder
                 self.intensity=0
                 self.prev_avg = mean(fcontent[self.minfbin:self.maxfbin])
-                self.time_since_thunder+1
+                self.time_since_thunder=self.time_since_thunder+1
             return self.intensity
 
     def setindex(self):

@@ -5,6 +5,9 @@ class ThunderDetector:
         self.intensity=0
         self.ledindex=0
         self.time_since_thunder=0
+        self.minfbin=int(100/(44100/chunk))
+        self.maxfbin = int(1000/(44100 / chunk))
+
 
     def detect(self, chunk, threshold):
         # print type(signal)
@@ -12,8 +15,8 @@ class ThunderDetector:
         data = frombuffer(chunk, dtype='<i2')
         #print(max(data))
         fcontent = abs(fft.fft(data-mean(data)))
-        if fcontent[4]>threshold or (self.time_since_thunder==0 and fcontent[4]>threshold/10):
-            self.intensity= 255 * fcontent[4] / max(abs(fcontent)) #normalize max brightness to 255
+        if mean(fcontent[self.minfbin:self.maxfbin])>threshold or (self.time_since_thunder==0 and mean(fcontent[self.minfbin:self.maxfbin])>threshold/10):
+            self.intensity= 255 * mean(fcontent[self.minfbin:self.maxfbin]) / max(abs(fcontent)) #normalize max brightness to 255
             self.time_since_thunder=0
         else:
             self.intensity=0

@@ -1,5 +1,6 @@
 from pyaudio import PyAudio, paInt16
 from thunderDetector import ThunderDetector
+from serial import Serial
 
 pa = PyAudio()
 
@@ -17,15 +18,20 @@ stream = pa.open(format = paInt16,
 
 data=stream.read(chunk)
 
+ser = Serial('/dev/ttyUSB0')
+
 while len(data)>0:
     #check if there is thunder in the data
     detector.detect(data, 100)
     #get new data
     data=stream.read(chunk)
     #change this print statement to output
-    print detector.intensity
+    intensity = int(detector.intensity)
+    print intensity
+    ser.write([0,intensity])
 
 stream.stop_stream()
 stream.close()
+ser.close()
 pa.terminate()
 

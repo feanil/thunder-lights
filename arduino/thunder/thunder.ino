@@ -1,4 +1,7 @@
 #include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+  #include <avr/power.h>
+#endif
 
 #define NUM_LEDS 300
 #define PIN 7
@@ -14,6 +17,7 @@ void setup() {
     Serial.begin(9600);
     strip.begin();
     strip.show();
+    randomSeed(analogRead(0));
 }
 
 void loop() {
@@ -21,11 +25,11 @@ void loop() {
       lighting_style = Serial.read();
       intensity = Serial.read();
 
-      if(index=0){
-        index = random(NUM_LEDS);
+      if(intensity == 0){
+        index = random(300);
       }
 
-      strip.setPixelColor(index, strip.Color(WHITE));
+      strip.setPixelColor(index, strip.Color(255,255,255));
       strip.setBrightness(intensity);
       strip.show();
 

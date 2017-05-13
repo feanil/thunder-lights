@@ -8,13 +8,13 @@ class ThunderDetector:
         self.minfbin=int(100/(44100/chunk))     #thunder is expected between these two frequencies
         self.maxfbin = int(1000/(44100 / chunk))
         self.prev_avg=1
-        self.prev_max=0
+        self.prev_max=1
 
 
     def detect(self, chunk, threshold):
         data = frombuffer(chunk, dtype='<i2')
         fcontent = abs(fft.fft(data - mean(data)))
-        if self.prev_avg==0:
+        if self.prev_avg==1:
             self.prev_avg = mean(fcontent[self.minfbin:self.maxfbin])
         else:
             if mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold: #new thunder

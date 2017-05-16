@@ -5,7 +5,6 @@
 
 #define NUM_LEDS 300
 #define PIN 7
-#define WHITE 255,255,255
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
@@ -31,6 +30,9 @@ void loop() {
       strip.setPixelColor(index, strip.Color(255,255,255));
       strip.setPixelColor(index+1, strip.Color(255,255,255));
       strip.setPixelColor(index+2, strip.Color(255,255,255));
+      strip.setPixelColor(index+3, strip.Color(255,255,255));
+      index -= 1;
+
 
       strip.setBrightness(intensity);
       strip.show();

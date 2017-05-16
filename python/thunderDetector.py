@@ -5,26 +5,27 @@ class ThunderDetector:
         self.intensity=0
         self.ledindex=0
         self.time_since_thunder=0
-        self.minfbin=int(100/(44100/chunk))     #thunder is expected between these two frequencies
-        self.maxfbin = int(1000/(44100 / chunk))
+        self.minfbin=int(50/(44100/chunk))     #thunder is expected between these two frequencies
+        self.maxfbin = int(700/(44100 / chunk))
         self.prev_avg=1
         self.prev_max=1
 
 
-    def detect(self, chunk, threshold):
+    def detect(self, chunk, onthreshold, offthreshold):
         data = frombuffer(chunk, dtype='<i2')
         fcontent = abs(fft.fft(data - mean(data)))
+        level=mean(fcontent[self.minfbin:self.maxfbin])
         if self.prev_avg==1:
-            self.prev_avg = mean(fcontent[self.minfbin:self.maxfbin])
+            self.prev_avg=level
         else:
-            if mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold: #new thunder
-                self.intensity= 255 #normalize max brightness to 255
-                self.prev_max=mean(fcontent[self.minfbin:self.maxfbin])
-                self.time_since_thunder=0
-            elif (self.time_since_thunder==0 and mean(fcontent[self.minfbin:self.maxfbin])/self.prev_avg>threshold/10):
+            if (self.time_since_thunder==0 and level/self.prev_avg>offthreshold and level<self.prev_max):
                 #continuing old thunder
-                self.intensity = 255 * mean(fcontent[self.minfbin:self.maxfbin]) / self.prev_max # normalize max brightness to 255
+                self.intensity = 255 * level / self.prev_max # normalize max brightness to 255
                 self.time_since_thunder = 0
+            elif level/self.prev_avg > onthreshold: #new thunder
+                self.intensity= 255 #normalize max brightness to 255
+                self.prev_max=level
+                self.time_since_thunder=0
             else: #no thunder
                 self.intensity=0
                 self.prev_avg = mean(fcontent[self.minfbin:self.maxfbin])

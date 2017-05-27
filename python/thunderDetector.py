@@ -28,7 +28,7 @@ class ThunderDetector:
                     self.prev_max=max(levels)
                 self.time_since_thunder = 0
             elif any(levels > onthreshold*self.prev_avg): #new thunder
-                self.intensity= 255 #normalize max brightness to 255
+                self.intensity= min(255, 255 * max(levels) / self.prev_max) #normalize max brightness to 255
                 self.prev_max=max(levels)
                 self.time_since_thunder=0
             else: #no thunder

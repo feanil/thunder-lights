@@ -1,4 +1,4 @@
-from numpy import fft, random,frombuffer, mean
+from numpy import fft, random,frombuffer, mean, zeros
 
 class ThunderDetector:
     def __init__(self, chunk):
@@ -7,8 +7,8 @@ class ThunderDetector:
         self.time_since_thunder=0
         self.minfbin=0    #thunder is expected between these two frequencies
         self.maxfbin = int(2500/(44100 / chunk))
-        self.prev_avg=zeros(1, chunk)
-        self.prev_max=zeros(1,chunk)
+        self.prev_avg=zeros((1, chunk))
+        self.prev_max=zeros((1,chunk))
         self.initflag=1;
 
 

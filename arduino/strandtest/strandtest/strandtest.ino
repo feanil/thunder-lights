@@ -29,6 +29,7 @@ void setup() {
 
 
   strip.begin();
+  strip.clear();
   strip.show(); // Initialize all pixels to 'off'
 }
 
@@ -44,9 +45,10 @@ void loop() {
 //  theaterChase(strip.Color(127, 0, 0), 50); // Red
 //  theaterChase(strip.Color(0, 0, 127), 50); // Blue
 
+  strip.clear();
   rainbow(20);
   rainbowCycle(20);
-  theaterChaseRainbow(50);
+//  theaterChaseRainbow(50);
 }
 
 // Fill the dots one after the other with a color

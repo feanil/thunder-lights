@@ -39,7 +39,7 @@ class ThunderDetector:
                 self.time_since_thunder=self.time_since_thunder+1
             if (self.old_intensity!=0):
                 # some basic low pass filtering for persistence
-                self.intensity = max(self.intensity, int(self.old_intensity*exp(-tc*ctime)))
+                self.intensity = max(self.intensity, int(self.old_intensity*exp(-ctime/tc)))
         self.old_intensity=self.intensity
         return self.intensity
 

@@ -8,7 +8,7 @@ class ThunderDetector:
         self.minfbin=0    #thunder is expected between these two frequencies
         self.maxfbin = int(2500/(44100 / chunk))
         self.prev_avg=zeros((1, chunk))
-        self.prev_max=zeros((1,chunk))
+        self.prev_max=1
         self.initflag=1;
 
 
@@ -19,16 +19,17 @@ class ThunderDetector:
         if self.initflag==1:
             self.initflag=0
             self.prev_avg = fcontent[self.minfbin:self.maxfbin]
+            self.prev_max=max(self.prev_avg)
         else:
             if (self.time_since_thunder==0 and any(levels >offthreshold*self.prev_avg)):
                 #continuing old thunder
-                self.intensity = min(255, 255 * max(levels) / max(self.prev_max)) # normalize max brightness to 255
+                self.intensity = min(255, 255 * max(levels) / self.prev_max) # normalize max brightness to 255
                 if self.intensity==255:
-                    self.prev_max=levels
+                    self.prev_max=max(levels)
                 self.time_since_thunder = 0
             elif any(levels > onthreshold*self.prev_avg): #new thunder
                 self.intensity= 255 #normalize max brightness to 255
-                self.prev_max=levels
+                self.prev_max=max(levels)
                 self.time_since_thunder=0
             else: #no thunder
                 self.intensity=0

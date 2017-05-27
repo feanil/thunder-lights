@@ -13,8 +13,8 @@ for i in range(0, numdevices):
         print "Input Device id ", i, " - ", pa.get_device_info_by_host_api_device_index(0, i).get('name')
 
 chunk = 1024
-on_threshold = 4
-off_threshold = 2
+on_threshold = 10
+off_threshold = 3
 counter = 0
 
 detector = ThunderDetector(chunk)

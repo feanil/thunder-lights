@@ -4,9 +4,9 @@
 #endif
 
 // Center Cloud
-//#define NUM_LEDS 300
+#define NUM_LEDS 300
 // Window Cloud
-#define NUM_LEDS 60
+//#define NUM_LEDS 60
 
 
 #define PIN 7
@@ -34,16 +34,15 @@ void loop() {
 void pattern_one(uint8_t intensity) {
     if(intensity == 0){
       index = random(294)+3;
-      strip.clear();
     }
     
     strip.setPixelColor(index-3, strip.Color(0,0,0));
     strip.setPixelColor(index-2, strip.Color(64,64,64));
     strip.setPixelColor(index-1, strip.Color(128,128,128));
-    strip.setPixelColor(index, strip.Color(255,255,255));
-    strip.setPixelColor(index+1, strip.Color(255,255,255));
-    strip.setPixelColor(index+2, strip.Color(255,255,255));
-    strip.setPixelColor(index+3, strip.Color(255,255,255));
+    strip.setPixelColor(index, strip.Color(intensity,intensity,intensity));
+    strip.setPixelColor(index+1, strip.Color(intensity,intensity,intensity));
+    strip.setPixelColor(index+2, strip.Color(intensity,intensity,intensity));
+    strip.setPixelColor(index+3, strip.Color(intensity,intensity,intensity));
     index += 1;
     
     strip.setBrightness(intensity);

@@ -14,14 +14,14 @@ for i in range(0, numdevices):
 
 chunk = 1024
 on_threshold = 10
-off_threshold = 3
+off_threshold = 8.17
 counter = 0
 
 detector = ThunderDetector(chunk)
 
 
 stream = pa.open(format = paInt16,
-                 channels = 5,
+                 channels = 2,
                  rate = 44100,
                  input=True,
                  )
@@ -29,7 +29,7 @@ stream = pa.open(format = paInt16,
 data=stream.read(chunk)
 
 num_devices_to_output_to = 0
-serial_device_names = glob("/dev/ttyUSB*")
+serial_device_names = glob("/dev/ttyUSB*") + glob("/dev/ttyACM*")
 serial_devices = [ Serial(device_name) for device_name in serial_device_names ]
 
 while data:
@@ -45,7 +45,8 @@ while data:
         print intensity
         if serial_devices:
             random.shuffle(serial_devices)
-            num_devices_to_output_to = random.randint(0, len(serial_devices)-1)
+            #num_devices_to_output_to = random.randint(0, len(serial_devices)-1)
+            num_devices_to_output_to = 3
 
     # Write data to relevant serial devices.
     for device in serial_devices[:num_devices_to_output_to]:

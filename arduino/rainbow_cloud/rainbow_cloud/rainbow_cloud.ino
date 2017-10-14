@@ -81,9 +81,9 @@ void show_strip() {
   strip.show();
 }
 
-TimedAction ta_updateTwinkle = TimedAction(15, updateTwinkle);
+TimedAction ta_updateTwinkle = TimedAction(10, updateTwinkle);
 TimedAction ta_showStrip = TimedAction(1, show_strip);
-TimedAction ta_updateRainbow = TimedAction(30, updateRainbow);
+TimedAction ta_updateRainbow = TimedAction(10, updateRainbow);
 TimedAction ta_updateTwinkleLocation = TimedAction(1000, updateTwinkleLocation);
 
 
@@ -97,7 +97,7 @@ void setup() {
 
   twinkles[0][0] = random(0,NUM_PIXELS - 3);
   twinkles[0][2] = 1;
-  twinkles[0][3] = 10;
+  twinkles[0][3] = 1;
 }
 
 

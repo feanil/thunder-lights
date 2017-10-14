@@ -7,6 +7,7 @@
 
 #define PIN 7
 #define NUM_PIXELS 300
+#define NUM_TWINKLES 4
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
 // Parameter 3 = pixel type flags, add together as needed:
@@ -24,7 +25,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, PIN, NEO_GRB + NEO_KHZ80
 
 
 
-uint8_t twinkles [3][4];
+uint8_t twinkles [NUM_TWINKLES][4];
 uint16_t first_color;
 int counter = 0;
 
@@ -45,26 +46,31 @@ uint32_t Wheel(byte WheelPos) {
 }
 
 void updateTwinkle(){
-  uint8_t i;
-  for(i=twinkles[0][0];i<=(twinkles[0][0] + 2); i++){
-    strip.setPixelColor(i, strip.Color(twinkles[0][2],twinkles[0][2],twinkles[0][2]));
-  }
-  twinkles[0][2] = twinkles[0][2] + twinkles[0][3];
-  if(twinkles[0][2] >= 255){
-    twinkles[0][2] = 255;
-    twinkles[0][3] = twinkles[0][3] * -1;
-  }
-  
-  if(twinkles[0][2] <= 0){
-    twinkles[0][2] = 0;
-    twinkles[0][3] = twinkles[0][3] * -1;
+  uint8_t i,j;
+  for(j=0;j < NUM_TWINKLES; j++){
+    for(i=twinkles[j][0];i<=(twinkles[j][0] + 2); i++){
+      strip.setPixelColor(i, strip.Color(twinkles[j][2],twinkles[j][2],twinkles[j][2]));
+    }
+    twinkles[j][2] = twinkles[j][2] + twinkles[j][3];
+    if(twinkles[j][2] >= 255){
+      twinkles[j][2] = 255;
+      twinkles[j][3] = twinkles[j][3] * -1;
+    }
+    
+    if(twinkles[j][2] <= 0){
+      twinkles[j][2] = 0;
+      twinkles[j][3] = twinkles[j][3] * -1;
+    }
   }
 }
 
 void updateTwinkleLocation(){
-  if( random(0,3) == 0){
-    twinkles[0][0] = random(0, NUM_PIXELS-3);
-  } 
+  uint8_t i;
+  for(i=0; i < NUM_TWINKLES; i++){
+    if( random(0,50) == 0){
+      twinkles[i][0] = random(0, NUM_PIXELS-3);
+    }
+  }
 }
 
 void updateRainbow() {
@@ -77,27 +83,28 @@ void updateRainbow() {
   }
 }
 
-void show_strip() {
-  strip.show();
+void reseedRandom(){
+    randomSeed(analogRead(0));
 }
 
 TimedAction ta_updateTwinkle = TimedAction(10, updateTwinkle);
-TimedAction ta_showStrip = TimedAction(1, show_strip);
 TimedAction ta_updateRainbow = TimedAction(10, updateRainbow);
 TimedAction ta_updateTwinkleLocation = TimedAction(1000, updateTwinkleLocation);
+TimedAction ta_reseedRandom = TimedAction(10000, reseedRandom);
 
 
 void setup() {
-
   strip.begin();
   strip.clear();
   strip.show(); // Initialize all pixels to 'off'
 
   randomSeed(analogRead(0));
 
-  twinkles[0][0] = random(0,NUM_PIXELS - 3);
-  twinkles[0][2] = 1;
-  twinkles[0][3] = 1;
+   for(uint8_t i=0; i < NUM_TWINKLES; i++){
+    twinkles[i][0] = random(0,NUM_PIXELS - 3);
+    twinkles[i][2] = random(0,255);
+    twinkles[i][3] = 1;
+   }
 }
 
 
@@ -108,5 +115,6 @@ void loop() {
   ta_updateRainbow.check();
   ta_updateTwinkle.check();
   ta_updateTwinkleLocation.check();
+  ta_reseedRandom.check();
   strip.show();
 }

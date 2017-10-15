@@ -67,7 +67,7 @@ void updateTwinkle(){
 void updateTwinkleLocation(){
   uint8_t i;
   for(i=0; i < NUM_TWINKLES; i++){
-    if( random(0,50) == 0){
+    if( random(0,10) == 0){
       twinkles[i][0] = random(0, NUM_PIXELS-3);
     }
   }
@@ -103,7 +103,7 @@ void setup() {
    for(uint8_t i=0; i < NUM_TWINKLES; i++){
     twinkles[i][0] = random(0,NUM_PIXELS - 3);
     twinkles[i][2] = random(0,255);
-    twinkles[i][3] = 1;
+    twinkles[i][3] = random(1,5);
    }
 }
 

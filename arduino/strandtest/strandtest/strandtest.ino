@@ -34,20 +34,7 @@ void setup() {
 }
 
 void loop() {
-  // Some example procedures showing how to display to the pixels:
-//  colorWipe(strip.Color(255, 255, 255), 50); // Red
-//  colorWipe(strip.Color(255, 0, 0), 50); // Red
-//  colorWipe(strip.Color(0, 255, 0), 50); // Green
-//  colorWipe(strip.Color(0, 0, 255), 50); // Blue
-////colorWipe(strip.Color(0, 0, 0, 255), 50); // White RGBW
-//  // Send a theater pixel chase in...
-//  theaterChase(strip.Color(127, 127, 127), 50); // White
-//  theaterChase(strip.Color(127, 0, 0), 50); // Red
-//  theaterChase(strip.Color(0, 0, 127), 50); // Blue
-
-  strip.clear();
-  rainbow(20);
-  rainbowCycle(20);
+  rainbowCycle(40);
 //  theaterChaseRainbow(50);
 }
 

@@ -13,9 +13,10 @@ for i in range(0, numdevices):
         print "Input Device id ", i, " - ", pa.get_device_info_by_host_api_device_index(0, i).get('name')
 
 chunk = 1024
-on_threshold = 10
-off_threshold = 8.17
+on_threshold = 17
+off_threshold = 10
 counter = 0
+time_constant = 0.1
 
 detector = ThunderDetector(chunk)
 
@@ -34,7 +35,7 @@ serial_devices = [ Serial(device_name) for device_name in serial_device_names ]
 
 while data:
     #check if there is thunder in the data
-    detector.detect(data, on_threshold, off_threshold)
+    detector.detect(data, on_threshold, off_threshold, time_constant)
     #get new data
     data=stream.read(chunk)
     #change this print statement to output
@@ -49,6 +50,7 @@ while data:
             num_devices_to_output_to = 3
 
     # Write data to relevant serial devices.
+    print "Intensity: {}".format(intensity)
     for device in serial_devices[:num_devices_to_output_to]:
         device.write([intensity])
 

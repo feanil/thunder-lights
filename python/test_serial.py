@@ -5,9 +5,9 @@ import time
 
 def update_lights(intensity):
     ser = serial.Serial('/dev/ttyUSB0')
-    ser.write([0,intensity])
+    ser.write(intensity)
     ser.close()
-    return output
+    print("Serial Written {}.".format(intensity))
 
 @click.command()
 @click.option('--intensity', prompt='What Intensity?',
@@ -17,4 +17,8 @@ def main(intensity):
     print(update_lights(intensity))
 
 if __name__ == "__main__":
-    main()
+#    main()
+    while True:
+        for i in range(50,2210):
+            update_lights(i)
+            time.sleep(1)

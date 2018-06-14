@@ -29,9 +29,8 @@ stream = pa.open(format = paInt16,
 
 data=stream.read(chunk)
 
-num_devices_to_output_to = 0
 serial_device_names = glob("/dev/ttyUSB*") + glob("/dev/ttyACM*")
-serial_devices = [ Serial(device_name) for device_name in serial_device_names ]
+serial_devices = [ Serial(device_name, baudrate=115200) for device_name in serial_device_names ]
 
 while data:
     #check if there is thunder in the data
@@ -46,12 +45,11 @@ while data:
         print intensity
         if serial_devices:
             random.shuffle(serial_devices)
-            #num_devices_to_output_to = random.randint(0, len(serial_devices)-1)
-            num_devices_to_output_to = 3
 
     # Write data to relevant serial devices.
     print "Intensity: {}".format(intensity)
-    for device in serial_devices[:num_devices_to_output_to]:
+    print "Serial Device Names: {}".format(serial_device_names)
+    for device in serial_devices:
         device.write([intensity])
 
 stream.stop_stream()
